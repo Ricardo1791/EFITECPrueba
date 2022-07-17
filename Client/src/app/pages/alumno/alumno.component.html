@@ -1,0 +1,97 @@
+<div class="card">
+  <div class="card-header">
+    <h5>Alumnos</h5>
+  </div>
+  <div class="card-body">
+    <button class="btn btn-primary mb-5" (click)="NuevoAlumno(template)">Nuevo Alumno</button>
+
+    <table class="table table-bordered" *ngIf="lista.length > 0">
+      <thead>
+        <tr>
+          <th>N°</th>
+          <th>Nombres</th>
+          <th>Apellidos</th>
+          <th>Fecha Nacimiento</th>
+          <th>Sexo</th>
+          <th>Opciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of lista; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ item.nombres }}</td>
+          <td>{{ item.apellidos }}</td>
+          <td>{{ item.fecha_nacimiento | date: "dd/MM/yyyy" }}</td>
+          <td>{{ item.sexo }}</td>
+          <td>
+            <button type="button" class="btn btn-primary" (click)="editarAlumno(template,item)">
+              <i class="fa fa-edit"></i>
+            </button>
+            <button type="button" class="btn btn-danger" (click)="anularAlumno(item, i)">
+              <i class="fa fa-ban"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left" *ngIf="nuevo">Nuevo Alumno</h4>
+    <h4 class="modal-title pull-left" *ngIf="!nuevo">Actualizar Alumno</h4>
+    <button
+      type="button"
+      class="btn-close close pull-right"
+      aria-label="Close"
+      (click)="modalRef?.hide()"
+    >
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    
+    <form class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Nombres</label>
+          <input type="text" class="form-control" [(ngModel)]="model.nombres" name="nombres" placeholder="Nombres">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Apellidos</label>
+          <input type="text" class="form-control" [(ngModel)]="model.apellidos" name="apellidos" placeholder="Apellidos">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Fecha de Nacimiento</label>
+            <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="model.fecha_nacimiento"
+            name="fecha_nacimiento"
+            #fecha_nacimiento="ngModel"
+            bsDatepicker
+          />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Sexo</label>
+            <div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" [(ngModel)]="model.sexo" name="sexo" value="M">
+                    <label class="form-check-label" for="inlineRadio1">M</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" [(ngModel)]="model.sexo" name="sexo" value="F">
+                    <label class="form-check-label" for="inlineRadio2">F</label>
+                  </div>
+            </div>
+        </div>
+
+        
+      </form>
+    
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="registrarAlumno()" *ngIf="nuevo">Aceptar</button>
+    <button type="button" class="btn btn-primary" (click)="actualizarAlumno()" *ngIf="!nuevo">Actualizar</button>
+  </div>
+</ng-template>

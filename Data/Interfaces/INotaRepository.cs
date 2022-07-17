@@ -12,6 +12,8 @@ namespace Data.Interfaces
         public IQueryable<AP_Alvarez_Ricardo_Nota> obtenerNota(int id);
         public Task actualizarNota(AP_Alvarez_Ricardo_Nota model);
         public Task anularNota(int id);
-        public Task<List<AP_Alvarez_Ricardo_Nota>> obtenerNotas();
+        public Task<string> obtenerNotas();
+        public Task<string> comboAlumnos();
+        public Task<string> comboCursos();
     }
 }

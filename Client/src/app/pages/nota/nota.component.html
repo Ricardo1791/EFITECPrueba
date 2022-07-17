@@ -1,0 +1,139 @@
+<div class="card">
+  <div class="card-header">
+    <h5>Notas</h5>
+  </div>
+  <div class="card-body">
+    <button class="btn btn-primary mb-5" (click)="NuevaNota(template)">
+      Nueva Nota
+    </button>
+
+    <table class="table table-bordered" *ngIf="lista.length > 0">
+      <thead>
+        <tr>
+          <th>N°</th>
+          <th>Alumno</th>
+          <th>Curso</th>
+          <th>Practica 1</th>
+          <th>Practica 2</th>
+          <th>Practica 3</th>
+          <th>Parcial</th>
+          <th>Final</th>
+          <th>Promedio</th>
+          <th>Opciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of lista; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ item.alumno }}</td>
+          <td>{{ item.curso }}</td>
+          <td>{{ item.practica1 }}</td>
+          <td>{{ item.practica2 }}</td>
+          <td>{{ item.practica3 }}</td>
+          <td>{{ item.parcial }}</td>
+          <td>{{ item.final }}</td>
+          <td>{{ calcularPromedio(item) }}</td>
+          <td>
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="editarNota(template, item)"
+            >
+              <i class="fa fa-edit"></i>
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger"
+              (click)="anularNota(item, i)"
+            >
+              <i class="fa fa-ban"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left" *ngIf="nuevo">Nueva Nota</h4>
+    <h4 class="modal-title pull-left" *ngIf="!nuevo">Actualizar Nota</h4>
+    <button
+      type="button"
+      class="btn-close close pull-right"
+      aria-label="Close"
+      (click)="modalRef?.hide()"
+    >
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">Alumno</label>
+        <ng-select
+          [items]="comboalumno"
+          bindLabel="text"
+          bindValue="value"
+          placeholder="Seleccione"
+          (change)="cambioAlumno($event)"
+          *ngIf="nuevo"
+        >
+        </ng-select>
+        <input type="text" class="form-control" disabled [value]="model.alumno" *ngIf="!nuevo">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Curso</label>
+        <ng-select
+          [items]="combocurso"
+          bindLabel="text"
+          bindValue="value"
+          placeholder="Seleccione"
+          (change)="cambioCurso($event)"
+          *ngIf="nuevo"
+        >
+        </ng-select>
+        <input type="text" class="form-control" disabled [value]="model.curso" *ngIf="!nuevo">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Practica N° 1</label>
+        <input type="number" class="form-control" [(ngModel)]="model.practica1" name="practica1" placeholder="Practica N° 1">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Practica N° 2</label>
+        <input type="number" class="form-control" [(ngModel)]="model.practica2" name="practica2" placeholder="Practica N° 2">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Practica N° 3</label>
+        <input type="number" class="form-control" [(ngModel)]="model.practica3" name="practica3" placeholder="Practica N° 3">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Parcial</label>
+        <input type="number" class="form-control" [(ngModel)]="model.parcial" name="parcial" placeholder="Parcial">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Final</label>
+        <input type="number" class="form-control" [(ngModel)]="model.final" name="final" placeholder="Final">
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="registrarNota()"
+      *ngIf="nuevo"
+    >
+      Aceptar
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="actualizarNota()"
+      *ngIf="!nuevo"
+    >
+      Actualizar
+    </button>
+  </div>
+</ng-template>

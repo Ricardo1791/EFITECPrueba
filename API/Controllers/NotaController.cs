@@ -23,13 +23,15 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<NotaDTO>>> obtenerNotas()
+        public async Task<ActionResult> obtenerNotas()
         {
             var lista = await _repo.obtenerNotas();
 
-            var mapeo = _mapper.Map<List<NotaDTO>>(lista);
+            if (string.IsNullOrEmpty(lista)){
+                lista = "[]";
+            }
 
-            return Ok(mapeo);
+            return Content(lista, "application/json");
         }
 
         [HttpGet("{id}")]
@@ -70,6 +72,30 @@ namespace API.Controllers
             await _repo.anularNota(id);
 
             return NoContent();
+        }
+
+        [HttpGet("comboalumno")]
+        public async Task<ActionResult> comboalumno()
+        {
+            var lista = await _repo.comboAlumnos();
+
+            if (string.IsNullOrEmpty(lista)){
+                lista = "[]";
+            }
+
+            return Content(lista, "application/json");
+        }
+
+        [HttpGet("combocurso")]
+        public async Task<ActionResult> combocurso()
+        {
+            var lista = await _repo.comboCursos();
+
+            if (string.IsNullOrEmpty(lista)){
+                lista = "[]";
+            }
+
+            return Content(lista, "application/json");
         }
     }
 }

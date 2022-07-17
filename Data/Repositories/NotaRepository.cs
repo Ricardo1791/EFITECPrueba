@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using data.Context;
 using Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace Data.Repositories
 {
@@ -31,17 +32,60 @@ namespace Data.Repositories
             await db.SaveChangesAsync();
         }
 
+        public async Task<string> comboAlumnos()
+        {
+            var query = await (from i in db.AP_Alvarez_Ricardo_Alumno
+                               where i.estado == true
+                               select new 
+                               {
+                                 text = i.nombres + " " + i.apellidos,
+                                 value = i.id
+                               }).ToListAsync();
+
+            return JsonSerializer.Serialize(query);
+        }
+
+        public async Task<string> comboCursos()
+        {
+            var query = await (from i in db.AP_Alvarez_Ricardo_Curso
+                                where i.estado == true
+                                select new 
+                                {
+                                    text = i.nombre,
+                                    value = i.id
+                                }).ToListAsync();
+
+            return JsonSerializer.Serialize(query);
+        }
+
         public IQueryable<AP_Alvarez_Ricardo_Nota> obtenerNota(int id)
         {
             var query = db.AP_Alvarez_Ricardo_Nota.Where(x => x.id == id);
             return query;
         }
 
-        public async Task<List<AP_Alvarez_Ricardo_Nota>> obtenerNotas()
+        public async Task<string> obtenerNotas()
         {
-            var lista = await db.AP_Alvarez_Ricardo_Nota.Where(x => x.estado == true).ToListAsync();
+            var query = await (from i in db.AP_Alvarez_Ricardo_Nota
+                               join j in db.AP_Alvarez_Ricardo_Alumno on i.idalumno equals j.id
+                               join k in db.AP_Alvarez_Ricardo_Curso on i.idcurso equals k.id
+                               where i.estado == true
+                               select new
+                               {
+                                  id = i.id,
+                                  idcurso = i.idcurso,
+                                  idalumno = i.idalumno,
+                                  curso = k.nombre,
+                                  alumno = j.nombres + " " + j.apellidos,
+                                  practica1 = i.practica1,
+                                  practica2 = i.practica2,
+                                  practica3 = i.practica3,
+                                  parcial = i.parcial,
+                                  final = i.final,
+                                  estado = i.estado
+                               }).ToListAsync();
 
-            return lista;
+            return JsonSerializer.Serialize(query);
         }
 
         public async Task<int> registrarNota(AP_Alvarez_Ricardo_Nota model)
