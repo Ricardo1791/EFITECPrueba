@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
+    [Authorize]
     public class AlumnoController: BaseApiController
     {
         private readonly IAlumnoRepository repo;

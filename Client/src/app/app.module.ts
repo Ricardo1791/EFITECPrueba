@@ -9,11 +9,13 @@ import { AlumnoComponent } from './pages/alumno/alumno.component';
 import { CursoComponent } from './pages/curso/curso.component';
 import { NotaComponent } from './pages/nota/nota.component';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { FormsModule } from '@angular/forms';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { JwtInterceptor } from './interceptors/jwt.interceptor';
+import { HomeComponent } from './pages/home/home.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     NavBarComponent,
     AlumnoComponent,
     CursoComponent,
-    NotaComponent
+    NotaComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -41,7 +44,9 @@ import { NgSelectModule } from '@ng-select/ng-select';
     FormsModule,
     NgSelectModule
   ],
-  providers: [],
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
